@@ -79,6 +79,11 @@ void create_map(std::unordered_map<char,int> &map){
 
 }
 
+void create_pq(std::priority_queue<Node,vector<Node>,Node_Compare> &pq,Node* arr,int l){
+	for(int i=0;i<l;i++)
+		pq.push(arr[i]);
+}
+
 int main(int argc, char const *argv[])
 {
 	unordered_map<char,int> map;
@@ -91,7 +96,9 @@ int main(int argc, char const *argv[])
 	for(Node n : arr)
 		cout<<n.ch<<" "<<n.freq<<endl;
 
+	int l=map.size();
 	priority_queue<Node,vector<Node>,Node_Compare> pq;
+	create_pq(pq,arr,l);
 
 	return 0;
 }
