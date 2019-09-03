@@ -12,9 +12,13 @@ class Node{
 public:
 	char ch;
 	int freq;
+	Node* left;
+	Node* right;
 	Node(char ch,int freq){
 		this->freq=freq;
 		this->ch=ch;
+		left=NULL;
+		right=NULL;
 	}
 
 	Node(){
