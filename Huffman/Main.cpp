@@ -4,7 +4,7 @@
 #include <queue>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h> 
+
 
 using namespace std;
 
@@ -12,17 +12,12 @@ class Node{
 public:
 	char ch;
 	int freq;
-	Node* left;
-	Node* right;
-	Node(char ch,int freq){
-		this->freq=freq;
-		this->ch=ch;
-		left=NULL;
-		right=NULL;
-	}
+	Node *left;
+	Node *right;
+	string huff_code;
 
 	Node(){
-		ch=' ';freq=0;
+		ch=' ';freq=0;left=NULL;right=NULL;
 	}
 };
 
@@ -53,7 +48,7 @@ void create_Nodes(unordered_map<char,int> m,Node* arr){
 	//return arr;
 }
 
-void create_map(std::unordered_map<char,int> &map){
+void create_map(unordered_map<char,int> &map){
 	string file_path="";	
 	cout<<"Enter path of file: ";
 	getline(cin,file_path);
@@ -83,26 +78,10 @@ void create_map(std::unordered_map<char,int> &map){
 
 }
 
-void create_pq(std::priority_queue<Node,vector<Node>,Node_Compare> &pq,Node* arr,int l){
-	for(int i=0;i<l;i++)
+void create_pq(priority_queue<Node,vector<Node>,Node_Compare> &pq,Node* arr,int l){
+	for(int i=0;i<l;i++){
+		//cout<<&arr[i]<<endl;
 		pq.push(arr[i]);
-}
-
-void create_Huff_codes(struct Node *node,unordered_map<char,string> &huffman_codes,string h){
-
-	if(node->right==NULL && node->left==NULL){
-		huffman_codes[node->ch]=h;
-		node->huff_code=h;
-		cout<<"Huf!"<<endl;
-		return;
-	}
-
-	if(node->left!=NULL){
-		create_Huff_codes(node->left,huffman_codes,"0"+h);
-	}
-
-	if(node->right!=NULL){
-		create_Huff_codes(node->right,huffman_codes,"1"+h);	
 	}
 }
 
@@ -122,26 +101,51 @@ Node create_tree(priority_queue<Node,vector<Node>,Node_Compare> &pq){
 	    pq.push(par);
 	}
 
-	Node* res=pq.top();
+	Node res=pq.top();
 	return res;
+}
+
+void tree_traverse(Node *node){
+	if(node->right==NULL && node->left==NULL)
+		return;
+	tree_traverse(node->left);
+}
+
+void create_Huff_codes(Node *node,unordered_map<char,string> &huffman_codes,string h){
+
+	if(node->right==NULL && node->left==NULL){
+		huffman_codes[node->ch]=h;
+		node->huff_code=h;
+		cout<<"Huf!"<<endl;
+		return;
+	}
+
+	if(node->left!=NULL){
+		create_Huff_codes(node->left,huffman_codes,"0"+h);
+	}
+
+	if(node->right!=NULL){
+		create_Huff_codes(node->right,huffman_codes,"1"+h);	
+	}
 }
 
 int main(int argc, char const *argv[])
 {
 	unordered_map<char,int> map;
-	create_map(map);
-	//print_map(*map);
+	create_map(map);int l=map.size();
+	//print_map(map);
 
-	Node arr[map.size()];
+	Node arr[l];
 	create_Nodes(map,arr);
 
-	for(Node n : arr)
-		cout<<n.ch<<" "<<n.freq<<endl;
+	// for(int i=0;i<l;i++)
+	// 	cout<<&arr[i]<<" "<<arr[i].ch<<" "<<arr[i].freq<<endl;
 
-	int l=map.size();
 	priority_queue<Node,vector<Node>,Node_Compare> pq;
 	create_pq(pq,arr,l);
-	Node* root=create_tree(pq);
-	
+	Node root=create_tree(pq);//cout<<&root<<" "<<&(root.left->left)<<&(root.left->right)<<&(root.right->left)<<endl;
+	Node *p=(Node*)root
+	tree_traverse(p);
+
 	return 0;
 }
