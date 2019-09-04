@@ -88,6 +88,44 @@ void create_pq(std::priority_queue<Node,vector<Node>,Node_Compare> &pq,Node* arr
 		pq.push(arr[i]);
 }
 
+void create_Huff_codes(struct Node *node,unordered_map<char,string> &huffman_codes,string h){
+
+	if(node->right==NULL && node->left==NULL){
+		huffman_codes[node->ch]=h;
+		node->huff_code=h;
+		cout<<"Huf!"<<endl;
+		return;
+	}
+
+	if(node->left!=NULL){
+		create_Huff_codes(node->left,huffman_codes,"0"+h);
+	}
+
+	if(node->right!=NULL){
+		create_Huff_codes(node->right,huffman_codes,"1"+h);	
+	}
+}
+
+Node create_tree(priority_queue<Node,vector<Node>,Node_Compare> &pq){
+	while(pq.size()!=1) {
+	    /* code */
+	    Node par;
+	    Node left_child=pq.top();pq.pop();
+
+	    Node right_child=pq.top();pq.pop();
+
+	    par.freq=(left_child.freq)+(right_child.freq);
+
+	    par.left=&left_child;par.right=&right_child;
+	    //cout<<&par<<" "<<par.left<<par.right<<endl;
+	    //cout<<par.left->ch<<" "<<par.right->ch<<endl;
+	    pq.push(par);
+	}
+
+	Node* res=pq.top();
+	return res;
+}
+
 int main(int argc, char const *argv[])
 {
 	unordered_map<char,int> map;
@@ -103,6 +141,7 @@ int main(int argc, char const *argv[])
 	int l=map.size();
 	priority_queue<Node,vector<Node>,Node_Compare> pq;
 	create_pq(pq,arr,l);
-
+	Node* root=create_tree(pq);
+	
 	return 0;
 }
