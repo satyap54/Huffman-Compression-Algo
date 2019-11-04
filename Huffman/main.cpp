@@ -58,6 +58,23 @@ void buildFrequencyTable(unordered_map<char,int> &map){
 
 //Node* buildEncodingTree
 
+// traverse the Huffman Tree and store Huffman Codes
+// in a map.
+void encode(Node* root, string str,
+			unordered_map<char, string> &huffmanCode)
+{
+	if (root == nullptr)
+		return;
+
+	// found a leaf node
+	if (!root->left && !root->right) {
+		huffmanCode[root->ch] = str;
+	}
+
+	encode(root->left, str + "0", huffmanCode);
+	encode(root->right, str + "1", huffmanCode);
+}
+
 //Functor to create min_heap
 class Node_Compare{
 public:
